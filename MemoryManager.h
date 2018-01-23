@@ -17,5 +17,6 @@ public:
 	~MemoryManager();
 
 	void addToMemory(T element);
+	void removeFromMemory(T element);
 };
 

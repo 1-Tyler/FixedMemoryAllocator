@@ -41,21 +41,49 @@ int MemoryManager<T>::getNextFreeBlock()
 template<class T>
 void MemoryManager<T>::addToMemory(T element)
 {
+	//Check if basePointer is in the warning zone if incremented
 	if (basePointer + 1 < warningZoneTotalSize / 2 || basePointer + 1 > memorySize - warningZoneTotalSize)
 	{
-
 		if (getNextFreeBlock() == NULL)
 		{
 			cout << "WARNING: Memory is fully allocated.";
 			return;
 		}
-
-
-		
 	}
 	else
 	{
-		cout << "WARNING: Memory is fully allocated.";
-		return;
+		if (memoryArray[basePointer] == NULL)
+		{
+			memoryArray[basePointer] = element;
+			basePointer++;
+		}
+		else
+		{
+			int freeBlock = getNextFreeBlock();
+			if (freeBlock == NULL)
+			{
+				cout << "WARNING: Memory is fully allocated.";
+				return;
+			}
+			else
+			{
+				memoryArray[freeBlock] = element;
+				basePointer++;
+			}
+		}
+	}
+}
+
+template<class T>
+void MemoryManager<T>::removeFromMemory(T element)
+{
+	for (int i = warningZoneTotalSize / 2; i > memorySize - warningZoneTotalSize; i++)
+	{
+		if (memoryArray[i] == element)
+		{
+			memoryArray[i] = NULL;
+			basePointer = i;
+			return;
+		}
 	}
 }
